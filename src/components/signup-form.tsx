@@ -13,7 +13,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
 import { signUp } from "server/user";
 import { z } from "zod";
 
@@ -26,12 +25,11 @@ import { ArrowLeft, Loader2 } from "lucide-react";
 
 const formSchema = z.object({
   email: z.email({ message: "無効なメール形式です" }),
-  userName: z.string().min(6, { message: "ユーザー名は6文字以上必要です" }),
+  userName: z.string().min(4, { message: "ユーザー名は4文字以上必要です" }),
   password: z
     .string()
-    .min(6, { message: "パスワードは6文字以上必要です" })
+    .min(8, { message: "パスワードは8文字以上必要です" })
     .max(50, { message: "パスワードは50文字以内にしてください" }),
-  isAdmin: z.boolean(),
 });
 
 export function SignupForm({ className, ...props }: React.ComponentProps<"div">) {
@@ -44,15 +42,13 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
       email: "",
       userName: "",
       password: "",
-      isAdmin: false,
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
 
-    const role = values.isAdmin ? "admin" : "user";
-    const { success, message } = await signUp(values.email, values.userName, values.password, role);
+    const { success, message } = await signUp(values.email, values.userName, values.password);
     if (success) {
       toast.success(message as string);
       router.push("/");
@@ -118,24 +114,6 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="isAdmin"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow-sm">
-                      <FormControl>
-                        <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-                      </FormControl>
-                      <div className="space-y-1 leading-none">
-                        <FormLabel>管理者として登録</FormLabel>
-                        <p className="text-xs text-muted-foreground">
-                          デモ用：チェックすると admin ロールが付与されます。
-                        </p>
-                      </div>
-                    </FormItem>
-                  )}
-                />
-
                 <div className="flex flex-col gap-4 mt-6">
                   <Button type="submit" disabled={isLoading} className="w-full">
                     {isLoading ? <Loader2 className="size-4 animate-spin" /> : "登録"}

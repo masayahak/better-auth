@@ -3,7 +3,7 @@ import { schema } from "@/db/schema";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
-import { admin } from "better-auth/plugins"; // 管理者機能用
+import { admin } from "better-auth/plugins";
 
 export const auth = betterAuth({
   emailAndPassword: {
@@ -13,13 +13,6 @@ export const auth = betterAuth({
     provider: "pg",
     schema: schema,
   }),
-  user: {
-    additionalFields: {
-      role: {
-        type: "string",
-      },
-    },
-  },
   session: {
     // セッションの有効期限 (例: 10分)
     expiresIn: 60 * 10,
@@ -30,6 +23,6 @@ export const auth = betterAuth({
   },
   plugins: [
     admin(),
-    nextCookies()  // 常に配列の最後に配置
-  ]
+    nextCookies(), // 常に配列の最後に配置
+  ],
 });

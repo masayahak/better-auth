@@ -23,20 +23,14 @@ export const signIn = async (email: string, password: string) => {
   }
 };
 
-export const signUp = async (
-  email: string,
-  name: string,
-  password: string,
-  role: string = "user",
-) => {
+export const signUp = async (email: string, name: string, password: string) => {
   try {
-    // 1. BetterAuthでユーザー作成 (roleは渡さない)
+    // Better Authの仕様上、roleはuserしか設定できない
     const res = await auth.api.signUpEmail({
       body: {
         email,
         password,
         name,
-        role,
       },
       headers: await headers(),
     });
