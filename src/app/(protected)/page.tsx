@@ -1,16 +1,11 @@
 import { requireSession } from "@/lib/auth-guard";
-import { 
-  Card, 
-  CardContent, 
-  CardDescription, 
-  CardHeader, 
-  CardTitle 
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Shield, User, Info } from "lucide-react";
 
 export default async function Home() {
+  // 認証ガード
   const session = await requireSession();
   const { name, email, role } = session.user;
   const roleVariant = role === "admin" ? "destructive" : "secondary";
@@ -18,14 +13,11 @@ export default async function Home() {
   return (
     <div className="flex min-h-[calc(100-vh-4rem)] flex-col items-center justify-center p-4 md:p-8">
       <main className="w-full max-w-2xl space-y-8">
-        
         <header className="space-y-2 text-center">
           <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
             認証済みダッシュボード
           </h1>
-          <p className="text-muted-foreground">
-            Better Auth による堅牢なセッション管理デモ
-          </p>
+          <p className="text-muted-foreground">Better Auth による堅牢なセッション管理デモ</p>
         </header>
 
         <Card className="border-2 shadow-xl">
@@ -38,10 +30,10 @@ export default async function Home() {
               <CardDescription>{email}</CardDescription>
             </div>
           </CardHeader>
-          
+
           <CardContent className="grid gap-6 mt-4">
             <Separator />
-            
+
             <div className="flex items-center justify-between rounded-lg border p-4 bg-muted/50">
               <div className="flex items-center space-x-3">
                 <Shield className="h-5 w-5 text-muted-foreground" />
@@ -55,7 +47,8 @@ export default async function Home() {
             <div className="flex items-start space-x-3 text-sm text-muted-foreground bg-blue-50/50 dark:bg-blue-950/20 p-4 rounded-md border border-blue-100 dark:border-blue-900">
               <Info className="h-5 w-5 mt-0.5 text-blue-600 shrink-0" />
               <p>
-                あなたの権限は「<span className="font-bold text-foreground">{role}</span>」として識別されています。
+                あなたの権限は「<span className="font-bold text-foreground">{role}</span>
+                」として識別されています。
                 システムアーキテクチャに基づき、上部メニューから権限に応じた管理リソースへアクセス可能です。
               </p>
             </div>

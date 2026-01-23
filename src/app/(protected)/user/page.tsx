@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export default async function UserPage() {
+  // 認証ガード
   const session = await requireSession();
   const { name, role, email } = session.user;
 

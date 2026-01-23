@@ -6,6 +6,7 @@ import { nextCookies } from "better-auth/next-js";
 import { admin } from "better-auth/plugins";
 
 export const auth = betterAuth({
+  // 防衛ライン②: メール/パスワード認証のみ許可
   emailAndPassword: {
     enabled: true,
   },
@@ -13,14 +14,13 @@ export const auth = betterAuth({
     provider: "pg",
     schema: schema,
   }),
+  // 防衛ライン③: セッション管理 (自動ログアウト)
   session: {
-    // セッションの有効期限 (例: 10分)
-    expiresIn: 60 * 10,
-
-    // セッションを更新する頻度 (例: １分)
-    // この期間が経過した後にアクセスすると、有効期限が `expiresIn` 分だけ再延長される
-    updateAge: 60,
+    expiresIn: 60 * 10, // 10分 (seconds)
+    updateAge: 60 * 1, // 1分ごとに有効期限を更新
   },
+  // 防衛ライン④: 認可 (Role管理)
+  // NextAuthのように手動で型拡張せずとも、プラグインを入れるだけで完了
   plugins: [
     admin(),
     nextCookies(), // 常に配列の最後に配置

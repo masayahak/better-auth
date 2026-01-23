@@ -2,7 +2,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-// 認証チェック
+// 認証ガード
 export async function requireSession() {
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -14,10 +14,12 @@ export async function requireSession() {
   return session;
 }
 
-// 管理者向け 認証＋認可チェック
+// 認証+認可(admin)ガード
 export async function requireAdmin() {
   // 認証チェック
   const session = await requireSession();
+
+  // 認可エラーはルートページへリダイレクト
   if (session.user.role !== "admin") {
     redirect("/");
   }

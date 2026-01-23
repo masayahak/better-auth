@@ -7,7 +7,7 @@ export async function proxy(request: NextRequest) {
 
   // 1. 公開パスの定義
   const publicPaths = ["/login", "/signup"];
-  const isPublicPath = publicPaths.some(path => pathname.startsWith(path));
+  const isPublicPath = publicPaths.some((path) => pathname.startsWith(path));
   const isAdminPath = pathname.startsWith("/admin");
 
   // 2. セッションの取得（Better Authによる厳密な検証）
@@ -48,7 +48,5 @@ export const config = {
    * 3. _next/image (image optimization files)
    * 4. favicon.ico, sitemap.xml, robots.txt (metadata files)
    */
-  matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
-  ],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)"],
 };

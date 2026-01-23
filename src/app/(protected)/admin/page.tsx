@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export default async function AdminPage() {
+  // 認証+認可(admin)ガード
   const session = await requireAdmin();
   const { name, email } = session.user;
 

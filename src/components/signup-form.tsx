@@ -13,7 +13,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { signUp } from "server/user";
 import { z } from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,6 +21,8 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ArrowLeft, Loader2 } from "lucide-react";
+
+import { signUp } from "@/lib/auth-client"; // Client SDK
 
 const formSchema = z.object({
   email: z.email({ message: "無効なメール形式です" }),
@@ -48,13 +49,20 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
 
-    const { success, message } = await signUp(values.email, values.userName, values.password);
-    if (success) {
-      toast.success(message as string);
-      router.push("/");
-    } else {
-      toast.error(message as string);
+    const { error } = await signUp.email({
+      email: values.email,
+      password: values.password,
+      name: values.userName,
+    });
+    if (error) {
+      toast.error(error.message);
+      setIsLoading(false);
+      return;
     }
+    // 成功時
+    toast.success("登録が完了しました");
+    router.push("/");
+
     setIsLoading(false);
   }
 
